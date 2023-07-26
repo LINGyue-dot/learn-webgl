@@ -23,18 +23,24 @@
       const vertex = `
         attribute vec2 position;
 
+        attribute vec4 a_Color;
+
+        varying vec4 v_Color;
+
         void main() {
           gl_PointSize = 1.0;
           gl_Position = vec4(position, 1.0, 1.0);
+          v_Color = a_Color;
         }
       `;
 
       const fragment = `
         precision mediump float;
+        varying vec4 v_Color;
 
         void main()
         {
-          gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+          gl_FragColor = v_Color;
         }    
       `;
 
@@ -52,10 +58,7 @@
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);
 
-
       gl.useProgram(program);
-
-      //  webgl 是右手坐标系
 
       // 写入 webgl 缓冲区
       const points = new Float32Array([-1, -1, 0, 1, 1, -1]);
@@ -69,12 +72,20 @@
       gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0); // 给变量设置长度和单位
       gl.enableVertexAttribArray(vPosition); // 激活变量
 
+      // gradually color
+      const colors = new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+
+      const colorBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+      const a_Color = gl.getAttribLocation(program, "a_Color");
+      gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(a_Color);
+
       // 执行着色器程序完成绘制
 
       gl.clear(gl.COLOR_BUFFER_BIT);
-      // gl.TRIANGLES 是三角形图元
-      // gl.drawArrays(gl.TRIANGLES, 0, 3);
-      gl.drawArrays(gl.LINE_LOOP, 0, 3);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     </script>
   </body>
 </html>
