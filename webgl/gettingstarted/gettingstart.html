@@ -13,6 +13,7 @@
   </head>
   <body>
     <!-- 一个三角形 -->
+    <!-- from https://time.geekbang.org/column/article/254631 -->
     <canvas id="canvas" width="500" height="500"></canvas>
 
     <script>
@@ -47,6 +48,7 @@
 
       // 创建 webglprogram 对象
       const program = gl.createProgram();
+      console.log(program);
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
       gl.linkProgram(program);

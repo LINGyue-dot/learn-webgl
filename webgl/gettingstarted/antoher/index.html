@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #canvas {
+        width: 500px;
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- from https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-fundamentals.html -->
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script id="vertex-shader" type="notjs">
+      // an attribute will receive data from a buffer
+      attribute vec4 a_position;
+
+      // all shaders have a main function
+      void main() {
+
+        // gl_Position is a special variable a vertex shader
+        // is responsible for setting
+        gl_Position = a_position;
+      }
+    </script>
+
+    <!-- TODO 渐变 -->
+    <script id="fragment-shader" type="notjs">
+      precision mediump float;
+      void main(){
+        gl_FragColor = vec4(1, 0, 0.5, 1);
+      }
+    </script>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
