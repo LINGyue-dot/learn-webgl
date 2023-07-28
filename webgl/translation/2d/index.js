@@ -11,6 +11,8 @@ const program = webglUtils.createProgramFromScripts(gl, [
 
 const positionLocation = gl.getAttribLocation(program, "a_position");
 
+const translationLocation = gl.getUniformLocation(program, "u_translation");
+
 const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
 const colorLocation = gl.getUniformLocation(program, "u_color");
 
@@ -40,7 +42,7 @@ function drawScene() {
 
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  setRectangle(gl, translation[0], translation[1], width, height);
+  setGeometry(gl);
 
   // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
   var size = 2; // 2 components per iteration
@@ -60,25 +62,32 @@ function drawScene() {
   // set the resolution
   gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
 
+  gl.uniform2f(translationLocation, ...translation);
+
   // set the color
   gl.uniform4fv(colorLocation, color);
 
   // Draw the rectangle.
   var primitiveType = gl.TRIANGLES;
   var offset = 0;
-  var count = 6;
+  var count = 18;
   gl.drawArrays(primitiveType, offset, count);
 }
 
-function setRectangle(gl, x, y, width, height) {
-  var x1 = x;
-  var x2 = x + width;
-  var y1 = y;
-  var y2 = y + height;
+function setGeometry(gl) {
   // 设置矩形的四点位置
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array([x1, y1, x2, y1, x1, y2, x1, y2, x2, y1, x2, y2]),
+    new Float32Array([
+      // 左竖
+      0, 0, 30, 0, 0, 150, 0, 150, 30, 0, 30, 150,
+
+      // 上横
+      30, 0, 100, 0, 30, 30, 30, 30, 100, 0, 100, 30,
+
+      // 中横
+      30, 60, 67, 60, 30, 90, 30, 90, 67, 60, 67, 90,
+    ]),
     gl.STATIC_DRAW
   );
 }
