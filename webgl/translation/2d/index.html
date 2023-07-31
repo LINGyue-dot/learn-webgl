@@ -12,6 +12,20 @@
         flex-direction: row;
       }
     </style>
+    <script src="https://webglfundamentals.org/webgl/resources/jquery-1.7.1.min.js"></script>
+    <script src="https://webglfundamentals.org/webgl/resources/jquery-ui-1.8.16.custom.min.js"></script>
+    <script src="https://webglfundamentals.org/webgl/resources/jquery.mousecapture.js"></script>
+    <script src="https://webglfundamentals.org/webgl/resources/jquery.gman.ui.js"></script>
+    <script src="https://webglfundamentals.org/webgl/resources/jquery-gman-circle.js"></script>
+    <!--
+    for most samples webgl-utils only provides shader compiling/linking and
+    canvas resizing because why clutter the examples with code that's the same in every sample.
+    See https://webglfundamentals.org/webgl/lessons/webgl-boilerplate.html
+    and https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+    for webgl-utils, m3, m4, and webgl-lessons-ui.
+    -->
+    <script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
+    <script src="https://webglfundamentals.org/webgl/resources/webgl-lessons-ui.js"></script>
   </head>
   <body>
     <canvas id="canvas"></canvas>
@@ -23,16 +37,25 @@
       Y: <input id="yInput" type="range" min="0" max="100" value="0" step="1" />
       <span id="y">0</span>
     </div>
+    <div>
+      <div id="rotation"></div>
+    </div>
 
     <script id="vertex-shader-2d" type="x-shader/x-vertex">
       attribute vec2 a_position;
 
       uniform vec2 u_resolution;
       uniform vec2 u_translation;
+      uniform vec2 u_rotation;
 
       void main() {
 
-        vec2 position = a_position + u_translation;
+        vec2 roratedPosition = vec2(
+          a_position.x * u_rotation.y + a_position.y* u_rotation.x,
+          a_position.y * u_rotation.y - a_position.x * u_rotation.x
+        );
+
+        vec2 position = roratedPosition + u_translation;
 
          // convert the rectangle points from pixels to 0.0 to 1.0
          vec2 zeroToOne = position / u_resolution;

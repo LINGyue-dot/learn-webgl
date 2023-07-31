@@ -1,7 +1,7 @@
 /**
  * reference to https://github.com/greggman/twgl.js/tree/b86b4a147f03d6d9a41dc71f428217870d1ee0c1
  */
-export const webglUtils = {
+export const WebglUtils = {
   resizeCanvasToDisplaySize(canvas, multiplier) {
     multiplier = multiplier || 1;
     multiplier = Math.max(0, multiplier);

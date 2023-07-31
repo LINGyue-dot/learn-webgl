@@ -1,10 +1,10 @@
-import { webglUtils } from "../../../common/lib/webglUtils.js";
+import { WebglUtils } from "../../../common/lib/webglUtils.js";
 
 const canvas = document.querySelector("#canvas");
 
 const gl = canvas.getContext("webgl");
 
-const program = webglUtils.createProgramFromScripts(gl, [
+const program = WebglUtils.createProgramFromScripts(gl, [
   "#vertex-shader-2d",
   "#fragment-shader-2d",
 ]);
@@ -12,17 +12,17 @@ const program = webglUtils.createProgramFromScripts(gl, [
 const positionLocation = gl.getAttribLocation(program, "a_position");
 
 const translationLocation = gl.getUniformLocation(program, "u_translation");
-
 const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
 const colorLocation = gl.getUniformLocation(program, "u_color");
+const rotationLocation = gl.getUniformLocation(program, "u_rotation");
 
 const positionBuffer = gl.createBuffer();
 
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
 const translation = [0, 0];
-const width = 100;
-const height = 30;
+const rotation = [0, 1];
+
 const color = [Math.random(), Math.random(), Math.random(), 1];
 
 initSider();
@@ -30,7 +30,7 @@ initSider();
 drawScene();
 
 function drawScene() {
-  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+  WebglUtils.resizeCanvasToDisplaySize(gl.canvas);
 
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
@@ -61,11 +61,11 @@ function drawScene() {
 
   // set the resolution
   gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
-
   gl.uniform2f(translationLocation, ...translation);
-
   // set the color
   gl.uniform4fv(colorLocation, color);
+
+  gl.uniform2f(rotationLocation, ...rotation);  
 
   // Draw the rectangle.
   var primitiveType = gl.TRIANGLES;
@@ -100,6 +100,16 @@ function initSider() {
   const yInput = document.querySelector("#yInput");
   yInput.addEventListener("input", (event) => {
     changeY(event.target.value);
+  });
+  $("#rotation").gmanUnitCircle({
+    width: 200,
+    height: 200,
+    value: 0,
+    slide: function (e, u) {
+      rotation[0] = u.x;
+      rotation[1] = u.y;
+      drawScene();
+    },
   });
 }
 function changeX(value) {
